@@ -1,0 +1,1 @@
+- [Riot patch-note markup](riot-patch-note-markup.md) — card text concatenates metadata and summaries; prefer Riot’s aria-label for clean titles.

@@ -1,6 +1,6 @@
-# [Project name]
+# Rakan Bot
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Rakan Bot watches Riot Games' official Wild Rift patch notes and announces new patches in a configured Discord channel.
 
 ## Run & Operate
 
@@ -10,6 +10,8 @@ _Replace the heading above with the project's name, and this line with one sente
 - `pnpm --filter @workspace/api-spec run codegen` — regenerate API hooks and Zod schemas from the OpenAPI spec
 - `pnpm --filter @workspace/db run push` — push DB schema changes (dev only)
 - Required env: `DATABASE_URL` — Postgres connection string
+- `python main.py` — run Rakan Bot locally or through the Rakan Bot workflow
+- Required secret: `DISCORD_BOT_TOKEN`
 
 ## Stack
 
@@ -22,15 +24,20 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `main.py` — Discord client, Riot patch-note parser, 30-minute polling loop, and deduplication state
+- `pyproject.toml` / `uv.lock` — Python runtime and Discord dependency
+- `data/rakan_patch_state.json` — runtime checkpoint for the last announced patch (created automatically)
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- The bot reads the official Riot patch-notes index instead of scraping third-party feeds.
+- A local JSON checkpoint prevents duplicate announcements across polling cycles and restarts.
+- The first successful check seeds the current patch without announcing historical content; later new patches are announced in chronological order.
+- Network fetching runs in a worker thread so it cannot block Discord's async event loop.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+Rakan Bot logs into Discord, checks Riot's official Wild Rift patch-notes page every 30 minutes, and posts a red embed with the patch title and link while mentioning `@everyone` for newly published patches.
 
 ## User preferences
 
@@ -38,7 +45,8 @@ _Populate as you build — explicit user instructions worth remembering across s
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- The Discord bot must have View Channel, Send Messages, Embed Links, and Mention Everyone permissions in channel `1538342201631707197`.
+- The bot token is stored as the `DISCORD_BOT_TOKEN` Replit Secret and must never be committed to source.
 
 ## Pointers
 
