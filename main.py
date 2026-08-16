@@ -26,6 +26,11 @@ PATCH_NOTES_DOMAIN = "wildrift.leagueoflegends.com"
 DISCORD_CHANNEL_ID = 1538342201631707197
 POLL_INTERVAL_MINUTES = 30
 EMBED_RED = discord.Colour.from_rgb(220, 53, 69)
+EMBED_IMAGE_URL = (
+    "https://cdn.discordapp.com/attachments/1513208957651386552/"
+    "1538578334022238320/wr-cb1-announcementarticle-banner-1920x1080.png"
+    "?ex=6a83303c&is=6a81debc&hm=f59ec1c0c8a362ac3c910ba49bf8d6fa571e644f744af8231882e14c37acce03&"
+)
 STATE_PATH = Path(
     os.getenv("RAKAN_STATE_PATH", "data/rakan_patch_state.json")
 )
@@ -240,6 +245,7 @@ class RakanBot(discord.Client):
                 url=note.url,
                 colour=EMBED_RED,
             )
+            embed.set_image(url=EMBED_IMAGE_URL)
             embed.set_footer(text="Official Wild Rift patch notes")
             await channel.send(
                 content="@everyone",
