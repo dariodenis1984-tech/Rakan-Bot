@@ -193,7 +193,7 @@ class RakanBot(discord.Client):
         intents.guilds = True
         super().__init__(intents=intents)
         self.state = load_state()
-async def setup_hook(self) -> None:
+        async def setup_hook(self) -> None:
         app = web.Application()
 
         async def health(request: web.Request) -> web.Response:
