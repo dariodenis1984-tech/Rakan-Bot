@@ -16,7 +16,7 @@ from urllib.request import Request, urlopen
 
 import discord
 from discord.ext import tasks
-
+from aiohttp import web
 
 BOT_NAME = "Rakan Bot"
 PATCH_NOTES_URL = (
@@ -193,7 +193,23 @@ class RakanBot(discord.Client):
         intents.guilds = True
         super().__init__(intents=intents)
         self.state = load_state()
+async def setup_hook(self) -> None:
+        app = web.Application()
 
+        async def health(request: web.Request) -> web.Response:
+            return web.Response(text="Rakan Bot is online!")
+
+        app.router.add_get("/", health)
+        app.router.add_get("/health", health)
+
+        runner = web.AppRunner(app)
+        await runner.setup()
+
+        port = int(os.getenv("PORT", "10000"))
+        site = web.TCPSite(runner, "0.0.0.0", port)
+        await site.start()
+
+        logger.info("Health server listening on port %s", port)
     async def on_ready(self) -> None:
         if self.user is not None:
             logger.info("Logged in as %s (%s)", self.user, self.user.id)
