@@ -1,8 +1,8 @@
 [project]
-name = "repl-nix-workspace"
+name = "rakan-bot"
 version = "0.1.0"
-description = "Add your description here"
+description = "Rakan Bot, a Discord bot that announces new Wild Rift patch notes"
 requires-python = ">=3.11"
 dependencies = [
-    "discord-py>=2.7.1",
+    "discord-py==2.7.1",
 ]

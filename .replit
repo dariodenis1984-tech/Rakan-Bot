@@ -1,12 +1,10 @@
+entrypoint = "main.py"
 modules = ["nodejs-24", "python-3.11"]
 
 [deployment]
-router = "application"
-deploymentTarget = "autoscale"
-
-[deployment.postBuild]
-args = ["pnpm", "store", "prune"]
-env = { "CI" = "true" }
+build = ["python3", "-m", "pip", "install", "--disable-pip-version-check", "-r", "requirements.txt"]
+run = ["python3", "-u", "main.py"]
+deploymentTarget = "vm"
 
 [workflows]
 runButton = "Project"
